@@ -48,8 +48,6 @@ public class Data {
 	}
 	
 	public void setRange(String range) throws DataException {
-		
-		// if not, try with String.split([";"])
 		int pos = range.indexOf(";");
 		if (pos < 0) {
 			throw new DataException("Data error setting range");
@@ -76,30 +74,25 @@ public class Data {
 	
 	@Override
 	public String toString() {
-		String s = new String();
-		s += "Min: " + this.min + ",Max: " + this.max + ",";
-		String ss = new String();
+		StringBuilder s = new StringBuilder();
+		s.append("Min: ").append(this.min).append(", Max: ").append(this.max).append(",[");
 		for(int i=0; i<data.length-1; i++) {
-			ss += data[i] + ", ";
+			s.append(data[i]).append(", ");
 		}
-		ss += data[data.length - 1];
-		s += "[" + ss + "],";
-		ss = "";
-		
+		s.append(data[data.length - 1]).append("],[");
 		for(int i=0; i<errors.length-1; i++) {
-			ss += errors[i] + ", ";
+			s.append(errors[i]).append(", ");
 		}
-		ss += errors[errors.length - 1];
-		s += "[" + ss + "],";
-		
+		s.append(errors[errors.length - 1]).append("],Average: ");
 		try {
-		 	s += "Average: " + this.calcAverage() + ", StandardDeviation: " + this.calcStandardDeviation();
+			s.append(this.calcAverage()).append(", StandardDeviation: ").append(this.calcStandardDeviation());
 		}
 		catch (DataException e) {
-			s += "Average: ERROR, StandardDeviation: ERROR";
+			s.append("ERROR, StandardDeviation: ERROR");
 		}
-		return s;
+		return new String(s);
 	}
+
 	
 	private void processData(String[] input) {
 		int datacnt = 0, errcnt = 0;
@@ -118,3 +111,4 @@ public class Data {
 
 	}
 }
+
