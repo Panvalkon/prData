@@ -1,6 +1,5 @@
 package prData;
 
-
 import java.util.Arrays;
 
 public class Data {
@@ -19,35 +18,35 @@ public class Data {
 
 	public double calcAverage() {
 		double average = 0;
-		int cnt = 0, i=0;
+		int cnt = 0, i = 0;
 		while (i < data.length && data[i] <= max) {
 			if (data[i] >= min) {
 				average += data[i];
 				cnt++;
 			}
-			i++;			
+			i++;
 		}
 		if (cnt == 0) {
 			throw new DataException("There is no data in the given range");
 		}
 		return average / cnt;
 	}
-	
+
 	public double calcStandardDeviation() {
 		double sDeviation = 0;
-			double average = this.calcAverage();
-			int cnt = 0, i =0;
-			while (i < data.length && data[i] <= max) {
-				if (data[i] >= min) {
-					sDeviation += Math.pow((data[i]-average),2);
-					cnt++;
-				}
-				i++;			
+		double average = this.calcAverage();
+		int cnt = 0, i = 0;
+		while (i < data.length && data[i] <= max) {
+			if (data[i] >= min) {
+				sDeviation += Math.pow((data[i] - average), 2);
+				cnt++;
 			}
-			return Math.sqrt(sDeviation/cnt);
+			i++;
+		}
+		return Math.sqrt(sDeviation / cnt);
 	}
-	
-	public void setRange(String range) {		
+
+	public void setRange(String range) {
 		// if not, try with String.split([";"])
 		int pos = range.indexOf(";");
 		if (pos < 0) {
@@ -57,38 +56,36 @@ public class Data {
 		try {
 			s = range.substring(0, pos);
 			this.min = Double.parseDouble(s);
-			s = range.substring(pos+1);
-			this.max = Double.parseDouble(s);		
-		}
-		catch (NumberFormatException e) {
+			s = range.substring(pos + 1);
+			this.max = Double.parseDouble(s);
+		} catch (NumberFormatException e) {
 			throw new DataException("Data error setting range");
 		}
 	}
-	
+
 	public double[] getData() {
 		return this.data;
 	}
-	
+
 	public String[] getErrors() {
 		return this.errors;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();
 		s.append("Min: ").append(this.min).append(", Max: ").append(this.max).append(",[");
-		for(int i=0; i<data.length-1; i++) {
+		for (int i = 0; i < data.length - 1; i++) {
 			s.append(data[i]).append(", ");
 		}
 		s.append(data[data.length - 1]).append("],[");
-		for(int i=0; i<errors.length-1; i++) {
+		for (int i = 0; i < errors.length - 1; i++) {
 			s.append(errors[i]).append(", ");
 		}
 		s.append(errors[errors.length - 1]).append("],Average: ");
 		try {
 			s.append(this.calcAverage()).append(", StandardDeviation: ").append(this.calcStandardDeviation());
-		}
-		catch (DataException e) {
+		} catch (DataException e) {
 			s.append("ERROR, StandardDeviation: ERROR");
 		}
 		return new String(s);
